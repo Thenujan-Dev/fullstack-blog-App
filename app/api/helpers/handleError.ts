@@ -9,6 +9,23 @@ export const handleError = ({
   defaultError: string;
 }) => {
   console.log(error);
+  const err = error as any;
+  if (err.code === "invalid-token") {
+    return NextResponse.json(
+      {
+        message: err.message,
+      },
+      { status: 400 }
+    );
+  }
+  if (err.code === "invalid-Expired") {
+    return NextResponse.json(
+      {
+        message: err.message,
+      },
+      { status: 400 }
+    );
+  }
   if (error instanceof z.ZodError) {
     return NextResponse.json(
       {

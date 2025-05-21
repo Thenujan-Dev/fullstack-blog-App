@@ -34,6 +34,10 @@ export const POST = async (req: NextRequest) => {
         { status: 400 }
       );
     }
+    await prisma.user.update({
+      where: { email: validatedData.email },
+      data: { isLoggin: true },
+    });
     const token = generateToken({ id: user.id });
     return NextResponse.json(
       {
