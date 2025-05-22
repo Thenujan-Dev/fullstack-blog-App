@@ -1,8 +1,9 @@
 import prisma from "@/lib/prisma";
-import { BlogSchema } from "@/schemas/blog.schema";
+import { BlogSchema, PaginationSchema } from "@/schemas/blog.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "../helpers/handleError";
 import privateRoute from "../helpers/privateRoute";
+import { getPaginationParams } from "../helpers/getPaginationParams";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -70,9 +71,10 @@ export const GET = async (req: NextRequest) => {
     : {};
 
   try {
-    const page = parseInt(req.nextUrl.searchParams.get("page") ?? "1", 10);
-    const size = parseInt(req.nextUrl.searchParams.get("size") ?? "25", 10);
-
+    const { page, size } = getPaginationParams({
+      req,
+      schema: PaginationSchema,
+    });
     const skip = (page - 1) * size;
 
     const [allBlogs, count] = await prisma.$transaction([
