@@ -129,6 +129,7 @@ exports.Prisma.BlogScalarFieldEnum = {
   title: 'title',
   slug: 'slug',
   content: 'content',
+  category: 'category',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -143,7 +144,12 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
-
+exports.Cat = exports.$Enums.Cat = {
+  all: 'all',
+  webdevelopment: 'webdevelopment',
+  webdesign: 'webdesign',
+  cybersecurity: 'cybersecurity'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',

@@ -1,10 +1,14 @@
 import { z } from "zod";
+const Cat = z.enum(["webdevelopment", "webdesign", "cybersecurity"]);
+
 const BlogSchema = z.object({
   title: z
     .string({ required_error: "Title is required!" })
     .min(3, { message: "Title must be at least 3 characters long" }),
 
   content: z.string({ required_error: "Content is required" }),
+
+  category: Cat,
 
   slug: z
     .string({ required_error: "Slug is required!" })

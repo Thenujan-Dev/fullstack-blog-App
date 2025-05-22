@@ -3,6 +3,12 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+enum Cat {
+  all
+  webdevelopment
+  webdesign
+  cybersecurity
+}
 
 generator client {
   provider = "prisma-client-js"
@@ -31,6 +37,7 @@ model Blog {
   title     String
   slug      String   @unique
   content   String
+  category  Cat      @default(all)
   userId    String   @db.ObjectId
   Author    User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())

@@ -85,17 +85,16 @@ export const GET = async (req: NextRequest) => {
         orderBy: {
           createdAt: "desc", // optional: newest first
         },
+        include: { Author: { select: { fullName: true } } },
       }),
-      prisma.blog.count({
-        where: searchCondition,
-      }),
+      prisma.blog.count({}),
     ]);
 
     return NextResponse.json(
       {
         success: true,
         data: {
-          blogs: allBlogs,
+          allBlogs,
           pagination: {
             total: count,
             page,

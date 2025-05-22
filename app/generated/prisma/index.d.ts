@@ -25,6 +25,25 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 export type Blog = $Result.DefaultSelection<Prisma.$BlogPayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const Cat: {
+  all: 'all',
+  webdevelopment: 'webdevelopment',
+  webdesign: 'webdesign',
+  cybersecurity: 'cybersecurity'
+};
+
+export type Cat = (typeof Cat)[keyof typeof Cat]
+
+}
+
+export type Cat = $Enums.Cat
+
+export const Cat: typeof $Enums.Cat
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -1997,6 +2016,7 @@ export namespace Prisma {
     title: string | null
     slug: string | null
     content: string | null
+    category: $Enums.Cat | null
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -2007,6 +2027,7 @@ export namespace Prisma {
     title: string | null
     slug: string | null
     content: string | null
+    category: $Enums.Cat | null
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -2017,6 +2038,7 @@ export namespace Prisma {
     title: number
     slug: number
     content: number
+    category: number
     userId: number
     createdAt: number
     updatedAt: number
@@ -2029,6 +2051,7 @@ export namespace Prisma {
     title?: true
     slug?: true
     content?: true
+    category?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -2039,6 +2062,7 @@ export namespace Prisma {
     title?: true
     slug?: true
     content?: true
+    category?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -2049,6 +2073,7 @@ export namespace Prisma {
     title?: true
     slug?: true
     content?: true
+    category?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -2132,6 +2157,7 @@ export namespace Prisma {
     title: string
     slug: string
     content: string
+    category: $Enums.Cat
     userId: string
     createdAt: Date
     updatedAt: Date
@@ -2159,6 +2185,7 @@ export namespace Prisma {
     title?: boolean
     slug?: boolean
     content?: boolean
+    category?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2172,12 +2199,13 @@ export namespace Prisma {
     title?: boolean
     slug?: boolean
     content?: boolean
+    category?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type BlogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "content" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["blog"]>
+  export type BlogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "content" | "category" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["blog"]>
   export type BlogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Author?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2192,6 +2220,7 @@ export namespace Prisma {
       title: string
       slug: string
       content: string
+      category: $Enums.Cat
       userId: string
       createdAt: Date
       updatedAt: Date
@@ -2592,6 +2621,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Blog", 'String'>
     readonly slug: FieldRef<"Blog", 'String'>
     readonly content: FieldRef<"Blog", 'String'>
+    readonly category: FieldRef<"Blog", 'Cat'>
     readonly userId: FieldRef<"Blog", 'String'>
     readonly createdAt: FieldRef<"Blog", 'DateTime'>
     readonly updatedAt: FieldRef<"Blog", 'DateTime'>
@@ -3006,6 +3036,7 @@ export namespace Prisma {
     title: 'title',
     slug: 'slug',
     content: 'content',
+    category: 'category',
     userId: 'userId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -3067,6 +3098,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Cat'
+   */
+  export type EnumCatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Cat'>
+    
+
+
+  /**
+   * Reference to a field of type 'Cat[]'
+   */
+  export type ListEnumCatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Cat[]'>
     
 
 
@@ -3165,6 +3210,7 @@ export namespace Prisma {
     title?: StringFilter<"Blog"> | string
     slug?: StringFilter<"Blog"> | string
     content?: StringFilter<"Blog"> | string
+    category?: EnumCatFilter<"Blog"> | $Enums.Cat
     userId?: StringFilter<"Blog"> | string
     createdAt?: DateTimeFilter<"Blog"> | Date | string
     updatedAt?: DateTimeFilter<"Blog"> | Date | string
@@ -3176,6 +3222,7 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     content?: SortOrder
+    category?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3190,6 +3237,7 @@ export namespace Prisma {
     NOT?: BlogWhereInput | BlogWhereInput[]
     title?: StringFilter<"Blog"> | string
     content?: StringFilter<"Blog"> | string
+    category?: EnumCatFilter<"Blog"> | $Enums.Cat
     userId?: StringFilter<"Blog"> | string
     createdAt?: DateTimeFilter<"Blog"> | Date | string
     updatedAt?: DateTimeFilter<"Blog"> | Date | string
@@ -3201,6 +3249,7 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     content?: SortOrder
+    category?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3217,6 +3266,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Blog"> | string
     slug?: StringWithAggregatesFilter<"Blog"> | string
     content?: StringWithAggregatesFilter<"Blog"> | string
+    category?: EnumCatWithAggregatesFilter<"Blog"> | $Enums.Cat
     userId?: StringWithAggregatesFilter<"Blog"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Blog"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Blog"> | Date | string
@@ -3304,6 +3354,7 @@ export namespace Prisma {
     title: string
     slug: string
     content: string
+    category?: $Enums.Cat
     createdAt?: Date | string
     updatedAt?: Date | string
     Author: UserCreateNestedOneWithoutBlogInput
@@ -3314,6 +3365,7 @@ export namespace Prisma {
     title: string
     slug: string
     content: string
+    category?: $Enums.Cat
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3323,6 +3375,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    category?: EnumCatFieldUpdateOperationsInput | $Enums.Cat
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Author?: UserUpdateOneRequiredWithoutBlogNestedInput
@@ -3332,6 +3385,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    category?: EnumCatFieldUpdateOperationsInput | $Enums.Cat
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3342,6 +3396,7 @@ export namespace Prisma {
     title: string
     slug: string
     content: string
+    category?: $Enums.Cat
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3351,6 +3406,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    category?: EnumCatFieldUpdateOperationsInput | $Enums.Cat
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3359,6 +3415,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    category?: EnumCatFieldUpdateOperationsInput | $Enums.Cat
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3478,6 +3535,13 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumCatFilter<$PrismaModel = never> = {
+    equals?: $Enums.Cat | EnumCatFieldRefInput<$PrismaModel>
+    in?: $Enums.Cat[] | ListEnumCatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Cat[] | ListEnumCatFieldRefInput<$PrismaModel>
+    not?: NestedEnumCatFilter<$PrismaModel> | $Enums.Cat
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -3488,6 +3552,7 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     content?: SortOrder
+    category?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3498,6 +3563,7 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     content?: SortOrder
+    category?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3508,9 +3574,20 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     content?: SortOrder
+    category?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumCatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Cat | EnumCatFieldRefInput<$PrismaModel>
+    in?: $Enums.Cat[] | ListEnumCatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Cat[] | ListEnumCatFieldRefInput<$PrismaModel>
+    not?: NestedEnumCatWithAggregatesFilter<$PrismaModel> | $Enums.Cat
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCatFilter<$PrismaModel>
+    _max?: NestedEnumCatFilter<$PrismaModel>
   }
 
   export type BlogCreateNestedManyWithoutAuthorInput = {
@@ -3571,6 +3648,10 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutBlogInput, UserUncheckedCreateWithoutBlogInput>
     connectOrCreate?: UserCreateOrConnectWithoutBlogInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type EnumCatFieldUpdateOperationsInput = {
+    set?: $Enums.Cat
   }
 
   export type UserUpdateOneRequiredWithoutBlogNestedInput = {
@@ -3661,11 +3742,29 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumCatFilter<$PrismaModel = never> = {
+    equals?: $Enums.Cat | EnumCatFieldRefInput<$PrismaModel>
+    in?: $Enums.Cat[] | ListEnumCatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Cat[] | ListEnumCatFieldRefInput<$PrismaModel>
+    not?: NestedEnumCatFilter<$PrismaModel> | $Enums.Cat
+  }
+
+  export type NestedEnumCatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Cat | EnumCatFieldRefInput<$PrismaModel>
+    in?: $Enums.Cat[] | ListEnumCatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Cat[] | ListEnumCatFieldRefInput<$PrismaModel>
+    not?: NestedEnumCatWithAggregatesFilter<$PrismaModel> | $Enums.Cat
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCatFilter<$PrismaModel>
+    _max?: NestedEnumCatFilter<$PrismaModel>
+  }
+
   export type BlogCreateWithoutAuthorInput = {
     id?: string
     title: string
     slug: string
     content: string
+    category?: $Enums.Cat
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3675,6 +3774,7 @@ export namespace Prisma {
     title: string
     slug: string
     content: string
+    category?: $Enums.Cat
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3712,6 +3812,7 @@ export namespace Prisma {
     title?: StringFilter<"Blog"> | string
     slug?: StringFilter<"Blog"> | string
     content?: StringFilter<"Blog"> | string
+    category?: EnumCatFilter<"Blog"> | $Enums.Cat
     userId?: StringFilter<"Blog"> | string
     createdAt?: DateTimeFilter<"Blog"> | Date | string
     updatedAt?: DateTimeFilter<"Blog"> | Date | string
@@ -3780,6 +3881,7 @@ export namespace Prisma {
     title: string
     slug: string
     content: string
+    category?: $Enums.Cat
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3788,6 +3890,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    category?: EnumCatFieldUpdateOperationsInput | $Enums.Cat
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3796,6 +3899,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    category?: EnumCatFieldUpdateOperationsInput | $Enums.Cat
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3804,6 +3908,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    category?: EnumCatFieldUpdateOperationsInput | $Enums.Cat
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
