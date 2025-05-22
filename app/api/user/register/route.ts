@@ -30,6 +30,7 @@ export const POST = async (req: NextRequest) => {
     });
     return NextResponse.json({
       success: true,
+      message: "User Registered successfully",
       newUser,
     });
   } catch (error) {
