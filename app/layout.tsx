@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Wrapper from "@/provider/Wrapper";
 import { Toaster } from "react-hot-toast";
+import AppContext from "./provider/AppContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Wrapper>
-          <Toaster />
-          {children}
-        </Wrapper>
+        <AppContext>
+          <Wrapper>
+            <Toaster />
+            {children}
+          </Wrapper>
+        </AppContext>
       </body>
     </html>
   );

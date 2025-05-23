@@ -41,7 +41,7 @@ export const PUT = async (req: NextRequest) => {
     await prisma.blog.update({ where: { id: userId }, data: validatedData });
     return NextResponse.json({
       success: true,
-      message: "User Updated Succesfully!",
+      message: "Blog Updated Succesfully!",
     });
   } catch (error) {
     return handleError({ error, defaultError: "Failed Updated blog" });

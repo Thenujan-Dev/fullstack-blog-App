@@ -7,8 +7,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import api from "../api/helpers/baseApi";
 import queryClient from "@/schemas/queryClient";
 import toast from "react-hot-toast";
+import { useLogContext } from "../provider/AppContext";
 const Navbar = () => {
   const [pop, setPop] = useState(true);
+  const { isLogin, setIsLogin } = useLogContext();
   const getWhoAmI = async (): Promise<{
     success: boolean;
     userData: { name: string; isLoggin: true };
@@ -26,6 +28,7 @@ const Navbar = () => {
     const data: { success: boolean; message: string } = await response.data;
     if (data.success) {
       toast.success(data.message);
+      setIsLogin(false);
     }
   };
   const { mutateAsync: LogUser } = useMutation({
@@ -43,7 +46,7 @@ const Navbar = () => {
           <h3 className="text-3xl font-semibold text-white">Blogger</h3>
         </Link>
 
-        {data?.success === true ? (
+        {data?.userData && isLogin ? (
           <div className="relative w-fit bg-white/10 backdrop-blur-md text-white rounded-xl shadow-xl overflow-hidden ">
             {/* User Info Header */}
             <div

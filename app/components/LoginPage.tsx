@@ -13,6 +13,7 @@ import { UserLoginSchema } from "@/schemas/user.schema";
 import api from "../api/helpers/baseApi";
 import Cookie from "js-cookie";
 import { CookieKeys } from "@/config/CookieKeys";
+import { useLogContext } from "../provider/AppContext";
 
 const textFieldStyles = {
   "& label": {
@@ -35,6 +36,7 @@ const textFieldStyles = {
 };
 
 const LoginPage = () => {
+  const { setIsLogin } = useLogContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [disabled, setDesabled] = useState(true);
@@ -55,6 +57,7 @@ const LoginPage = () => {
       await response.data;
     if (data.success) {
       toast.success(data.message);
+      setIsLogin(true);
       reset();
       Cookie.set(CookieKeys.COOKIE_KEY, data.token);
       router.push("/");

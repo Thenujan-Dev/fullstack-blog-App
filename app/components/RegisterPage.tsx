@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Button } from "@mui/material";
 import Link from "next/link";
 import { z } from "zod";
@@ -23,6 +23,11 @@ const textFieldStyles = {
 };
 
 const RegisterPage = () => {
+  const [fullname, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [disable, setDesable] = useState(true);
   type userResisterRsposnseType = z.infer<typeof UserRegisterSchema>;
   const router = useRouter();
   const {
@@ -59,7 +64,7 @@ const RegisterPage = () => {
       toast.error("User Already Exists");
     }
   };
-  const { mutateAsync: RegiUser } = useMutation({
+  const { mutateAsync: RegiUser, isPending } = useMutation({
     mutationKey: ["register-user"],
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || "Something went wrong");
@@ -67,6 +72,13 @@ const RegisterPage = () => {
 
     mutationFn: RegUser,
   });
+  useEffect(() => {
+    if (!fullname || !email || !password || !confirmPassword) {
+      setDesable(true);
+    } else {
+      setDesable(false);
+    }
+  }, [fullname, email, password, confirmPassword]);
   return (
     <div className="h-dvh w-full bg-gradient-to-br from-blue-700 via-purple-600 to-pink-500 flex items-center justify-center p-4">
       <div className="max-w-6xl w-full bg-white/10 backdrop-blur-lg shadow-2xl rounded-2xl border border-white/20 flex flex-col md:flex-row gap-10 p-8 md:p-12 items-center">
@@ -89,7 +101,13 @@ const RegisterPage = () => {
           })}
         >
           <h1 className="text-4xl font-extrabold text-white text-center mb-2 drop-shadow-md">
-            User <span className="text-indigo-300">Register</span>
+            {isPending ? (
+              "Processing..."
+            ) : (
+              <>
+                User <span className="text-indigo-300">Register</span>
+              </>
+            )}
           </h1>
 
           <TextField
@@ -102,6 +120,8 @@ const RegisterPage = () => {
             {...register("fullName")}
             helperText={errors.fullName?.message}
             error={!!errors.fullName?.message}
+            value={fullname}
+            onChange={(e) => setFullName(e.target.value)}
           />
           <TextField
             size="small"
@@ -114,6 +134,8 @@ const RegisterPage = () => {
             {...register("email")}
             helperText={errors.email?.message}
             error={!!errors.email?.message}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             size="small"
@@ -126,6 +148,8 @@ const RegisterPage = () => {
             {...register("password")}
             helperText={errors.password?.message}
             error={!!errors.password?.message}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <TextField
             size="small"
@@ -138,6 +162,8 @@ const RegisterPage = () => {
             {...register("confirmPassword")}
             helperText={errors.confirmPassword?.message}
             error={!!errors.confirmPassword?.message}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
           <Link
@@ -150,6 +176,7 @@ const RegisterPage = () => {
           <Button
             fullWidth
             size="large"
+            disabled={disable}
             type="submit"
             variant="contained"
             sx={{
@@ -163,7 +190,7 @@ const RegisterPage = () => {
               },
             }}
           >
-            Register
+            {isPending ? "Processing..." : "Register"}
           </Button>
         </form>
       </div>
