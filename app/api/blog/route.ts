@@ -93,6 +93,7 @@ export const GET = async (req: NextRequest) => {
     return NextResponse.json(
       {
         success: true,
+        message: "Blog Added successfully!",
         data: {
           allBlogs,
           pagination: {

@@ -23,6 +23,7 @@ export const GET = async () => {
           );
         }
         return NextResponse.json({
+          success: true,
           userData: {
             name: user.fullName,
             isLoggin: user.isLoggin,

@@ -1,14 +1,14 @@
 "use client";
 import { Button, TextField, MenuItem } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../api/helpers/baseApi";
+import { Blog } from "../generated/prisma";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import queryClient from "@/schemas/queryClient";
 
-const AddBlog = () => {
+const EditBlog = ({ id }: { id: string }) => {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [category, setCategory] = useState<
@@ -17,38 +17,53 @@ const AddBlog = () => {
   const [content, setContent] = useState("");
 
   const router = useRouter();
+  const getSingleBlog = async (): Promise<{ singleBlog: Blog }> => {
+    const response = await api.get(`/blog/${id}`);
+    return response.data;
+  };
 
-  const AddBlog = async () => {
-    const response = await api.post("/blog", {
-      title,
-      slug,
-      category,
-      content,
-    });
-    const data = response.data as { success: boolean; message: string };
+  const { data: SingleBlog } = useQuery({
+    queryKey: ["get-single-blog", id],
+    queryFn: getSingleBlog,
+  });
+  const EditData = {
+    title: title,
+    content: content,
+    slug: slug,
+    category: category,
+  };
+
+  const EditBlog = async () => {
+    const rsponse = await api.put(`/blog/${id}`, EditData);
+    const data = (await rsponse.data) as { success: boolean; message: string };
     if (data.success) {
-      toast.success(data.message || "blog added successfully");
+      toast.success(data.message);
       router.push("/");
     }
     return data;
   };
-
-  const { isPending: isAdding, mutateAsync: CreateBlog } = useMutation({
-    mutationKey: ["add-blog"],
-    mutationFn: AddBlog,
+  const { isPending: editSpending, mutateAsync: UpdateBlg } = useMutation({
+    mutationKey: ["edit-blog"],
+    mutationFn: EditBlog,
     onError: () => {
-      toast.error("Something went wrong while creating the blog.");
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-blogs"] });
+      toast.error("something Error Occure");
     },
   });
+
+  useEffect(() => {
+    if (SingleBlog?.singleBlog) {
+      setTitle(SingleBlog.singleBlog.title);
+      setSlug(SingleBlog.singleBlog.slug);
+      setCategory(SingleBlog.singleBlog.category);
+      setContent(SingleBlog.singleBlog.content);
+    }
+  }, [SingleBlog]);
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-tr from-indigo-900 via-purple-900 to-blue-900 p-4">
       <div className="w-full max-w-6xl bg-white/10 backdrop-blur-lg border border-white/30 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] p-8 animate-fade-in flex flex-col gap-8">
         <h1 className="text-5xl font-black text-center text-white tracking-tight">
-          Add <span className="text-purple-300">Blog</span>
+          Edit <span className="text-purple-300">Blog</span>
         </h1>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -56,7 +71,7 @@ const AddBlog = () => {
             <div className="relative w-full h-64 lg:h-[450px] rounded-xl overflow-hidden shadow-xl border-4 border-white/20">
               <Image
                 src="/edit.png"
-                alt="Add Blog"
+                alt="Edit Blog"
                 fill
                 className="object-cover"
               />
@@ -141,9 +156,9 @@ const AddBlog = () => {
                 color="success"
                 variant="contained"
                 className="rounded-xl px-6 py-2 text-lg font-semibold shadow-md hover:scale-105 transition-transform"
-                onClick={() => CreateBlog()}
+                onClick={() => UpdateBlg()}
               >
-                {isAdding ? "Adding..." : "Add"}
+                {editSpending ? "Updating" : "Update"}
               </Button>
               <Button
                 type="button"
@@ -162,4 +177,4 @@ const AddBlog = () => {
   );
 };
 
-export default AddBlog;
+export default EditBlog;

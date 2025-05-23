@@ -4,7 +4,7 @@ import privateRoute from "../../helpers/privateRoute";
 import { NextResponse } from "next/server";
 import { CookieKeys } from "@/config/CookieKeys";
 
-export const GET = async () => {
+export const POST = async () => {
   try {
     return await privateRoute(async (usr) => {
       const userId = usr.id;

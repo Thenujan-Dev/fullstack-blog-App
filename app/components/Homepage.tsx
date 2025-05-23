@@ -2,12 +2,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Navbar from "./Navbar";
 import BlogText from "./BlogText";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import api from "../api/helpers/baseApi";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
+import toast from "react-hot-toast";
+import Link from "next/link";
 
 type cat = "All" | "webdevelopment" | "webdesign" | "cybersecurity";
 
@@ -33,11 +35,14 @@ const categories: cat[] = [
 ];
 
 const Homepage = () => {
+  const queryClient = useQueryClient();
+
   const [searchInput, setSearchInput] = useState("");
   const [searchDebounced, setSearchDebounced] = useState(searchInput);
   const [pageNumber, setPageNumber] = useState(1);
   const [size, setSize] = useState(25);
   const [bg, setBg] = useState<cat>("All");
+  const [iid, setIid] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -93,6 +98,26 @@ const Homepage = () => {
     }
   };
 
+  const DeleteBlog = async (id: string) => {
+    setIid(id);
+    const response = await api.delete(`/blog/${id}`);
+    const data = (await response.data) as { success: boolean; message: string };
+    if (data.success) {
+      toast.success(data.message);
+    }
+  };
+
+  const { mutateAsync: DlBlog, isPending: dltSpending } = useMutation({
+    mutationFn: DeleteBlog,
+    mutationKey: ["delete-blog"],
+    onError: () => {
+      toast.error("Something Error Occure when deleting blog");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["get-blogs"] });
+    },
+  });
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-l from-blue-500 to-indigo-900 pb-20">
       <Navbar />
@@ -108,8 +133,13 @@ const Homepage = () => {
           className="w-full sm:w-[75%] px-4 py-2 rounded-md border border-white focus:outline-none focus:ring-2 focus:ring-white/50 bg-white/20 text-white placeholder-white/70 transition-all"
         />
         <button className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-md transition-all">
-          <IoMdAddCircleOutline className="text-white text-lg" />
-          Add
+          <Link
+            href={"/admin/add"}
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-md transition-all"
+          >
+            <IoMdAddCircleOutline className="text-white text-lg" />
+            Add
+          </Link>
         </button>
       </div>
 
@@ -151,14 +181,27 @@ const Homepage = () => {
                 Author:{" "}
                 <span className="text-orange-400">{blg.Author.fullName}</span>
               </h2>
+              <h3>Slug:{blg.slug}</h3>
               <p className="text-sm line-clamp-4 text-white/90">
                 {blg.content}
               </p>
               <div className="flex justify-between mt-4">
-                <Button variant="contained" size="small" color="error">
-                  Delete
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="error"
+                  onClick={() => DlBlog(blg.id)}
+                  disabled={iid === blg.id && dltSpending}
+                >
+                  {iid === blg.id && dltSpending ? "Deleting..." : "Delete"}
                 </Button>
-                <Button variant="contained" size="small" color="primary">
+
+                <Button
+                  href={`/pages/edit/${blg.id}`}
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                >
                   Edit
                 </Button>
               </div>
